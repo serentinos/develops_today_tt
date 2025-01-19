@@ -1,9 +1,10 @@
 import cors from "cors";
 import express, { type Express } from "express";
-import { env } from '@/utils/envConfig'
+import { env } from "@/utils/envConfig";
 import requestLogger from "@/middlewares/requestLogger";
 import errorHandler from "@/middlewares/errorHandler";
 import pino from "pino";
+import { countriesRouter } from "./routes/countries/countriesRouter";
 
 const logger = pino({ name: "server start" });
 const app: Express = express();
@@ -18,6 +19,8 @@ app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
 
 // Request logging
 app.use(requestLogger);
+
+app.use("/countries", countriesRouter);
 
 // Error handlers
 app.use(errorHandler());

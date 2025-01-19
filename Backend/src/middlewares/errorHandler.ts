@@ -1,3 +1,4 @@
+import { logger } from "@/server";
 import type { ErrorRequestHandler, RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -6,6 +7,7 @@ const unexpectedRequest: RequestHandler = (_req, res) => {
 };
 
 const addErrorToRequestLog: ErrorRequestHandler = (err, _req, res, next) => {
+  logger.error(err);
   res.locals.err = err;
   next(err);
 };
