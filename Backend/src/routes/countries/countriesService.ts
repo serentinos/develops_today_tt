@@ -8,13 +8,16 @@ class CountriesService {
   private fetchCountryPopulation = async (country: string) => {
     const fetchUrl = `https://countriesnow.space/api/v0.1/countries/population`;
     const body = {
-      country: country.toLowerCase(),
+      country: country,
     };
 
     try {
       const responsePromise = await fetch(fetchUrl, {
         method: "POST",
         body: JSON.stringify(body),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
 
       const countryPopulation =
