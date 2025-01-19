@@ -39,6 +39,7 @@ export interface IFullCountryInfo {
         officialName: string;
         countryCode: string;
         region: string;
+        flagData?: IAllCountryFlag;
       }[]
     | null;
   flagData?: IAllCountryFlag;

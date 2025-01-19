@@ -7,6 +7,8 @@ import {
 import { Suspense } from "react";
 import { PopulationChart } from "@/components/ui/populationChart";
 import { Card, CardHeader } from "@/components/ui/card";
+import CountryInfoSkeleton from "@/components/skeletons/countryInfoSkeleton";
+import { notFound } from "next/navigation";
 
 const getMappedCountryBorders = (
   countryData: IFullCountryInfo
@@ -14,6 +16,7 @@ const getMappedCountryBorders = (
   return countryData.borders?.map((borderInfo) => ({
     countryCode: borderInfo.countryCode,
     name: borderInfo.commonName,
+    flagData: borderInfo.flagData,
   }));
 };
 
@@ -23,30 +26,33 @@ async function DetailedCountryInfoLoader({
   countryCode: string;
 }) {
   const countryData = await getCountryByCode(countryCode);
+
+  if (!countryData) {
+    notFound();
+  }
+
   const bordersList = getMappedCountryBorders(countryData);
   return (
     <div className="p-4 flex flex-col gap-4">
       <h2 className="text-3xl mb-3 font-semibold">{countryData.commonName}</h2>
-      {bordersList ? (
+      {bordersList && bordersList.length ? (
         <>
           <p className="text-xl mb-2">
             Have borders with {bordersList.length} countries:
           </p>
           <CountriesList countries={bordersList} />
-          {countryData.populationCounts ? (
-            <PopulationChart
-              populationData={countryData.populationCounts.populationCounts}
-            />
-          ) : (
-            <Card>
-              <CardHeader>
-                There is no population data for this country
-              </CardHeader>
-            </Card>
-          )}
         </>
       ) : (
         <p>This country does not have any borders</p>
+      )}
+      {countryData.populationCounts ? (
+        <PopulationChart
+          populationData={countryData.populationCounts.populationCounts}
+        />
+      ) : (
+        <Card>
+          <CardHeader>There is no population data for this country</CardHeader>
+        </Card>
       )}
     </div>
   );
@@ -59,7 +65,7 @@ export default async function Home({
 }) {
   const countryId = (await params).id;
   return (
-    <Suspense>
+    <Suspense fallback={<CountryInfoSkeleton />}>
       <DetailedCountryInfoLoader countryCode={countryId} />
     </Suspense>
   );

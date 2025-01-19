@@ -19,7 +19,7 @@ export default function CountryButton({
       >
         {imageURL ? (
           <Image
-            src={imageURL}
+            src={imageURL.trim()}
             alt={`${countryItem.name} flag`}
             className="w-6 h-6 object-contain object-center"
             width={24}
