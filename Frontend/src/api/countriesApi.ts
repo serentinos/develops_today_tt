@@ -5,7 +5,7 @@ import {
   IFullCountryInfo,
 } from "../models/countryApiResponse";
 
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = process.env.BACKEND_URL || "http://localhost:8080";
 
 export const getCountriesList = async (): Promise<ICountryLIstItem[]> => {
   const response = await fetch(`${BASE_URL}/countries`);
