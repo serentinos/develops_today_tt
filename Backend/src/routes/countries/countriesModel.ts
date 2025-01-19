@@ -19,12 +19,13 @@ interface ISeparateCountryInfo {
   officialName: string;
   countryCode: string;
   region: string;
-  borders: ISeparateCountryInfo[] | null;
+  borders?: ISeparateCountryInfo[];
+  flagData?: IAllCountryFlag;
 }
 
 interface ISeparateCountryInfoFormated extends ISeparateCountryInfo {
   flagData: IAllCountryFlag;
-  borders: ISeparateCountryInfoFormated[] | null;
+  borders?: ISeparateCountryInfoFormated[];
 }
 
 interface ICountryInfoFormated extends ICountryInfo {
@@ -52,4 +53,5 @@ interface IPopulationCount {
 interface IFullCountryInfo extends ISeparateCountryInfo {
   populationCounts: ICountryPopulation;
   flagData?: IAllCountryFlag;
+  borders?: ISeparateCountryInfo[];
 }

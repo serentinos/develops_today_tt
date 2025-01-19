@@ -54,19 +54,28 @@ class CountriesService {
 
   private fetchCountryBorderInfo = async (
     countryCode: string
-  ): Promise<ISeparateCountryInfo> => {
+  ): Promise<ISeparateCountryInfo | null> => {
     const fetchUrl = `https://date.nager.at/api/v3/CountryInfo/${countryCode}`;
 
     try {
       const responsePromise = await fetch(fetchUrl);
-      if (responsePromise.ok !== true) {
-        throw new Error("Response is not succeded");
+
+      const rawData = await responsePromise.json();
+      if (rawData.status && rawData.status === 404) {
+        return null;
       }
+      const countryBorderInfo = rawData as ISeparateCountryInfo;
 
-      const countryBorderInfo =
-        (await responsePromise.json()) as ISeparateCountryInfo;
+      const flagsData = await this.fetchCountryFlags();
+      const borders = countryBorderInfo.borders?.map((border) => ({
+        ...border,
+        flagData: flagsData.find(({ iso2 }) => border.countryCode === iso2),
+      }));
 
-      return countryBorderInfo;
+      return {
+        ...countryBorderInfo,
+        borders,
+      };
     } catch (error) {
       throw new Error(
         `Issue while fetching border info, ${(error as Error).message}`
@@ -138,6 +147,10 @@ class CountriesService {
         this.fetchCountryBorderInfo(countryCode),
         this.fetchCountryFlags(),
       ]);
+
+      if (!borderInfo) {
+        return ServiceResponse.failure("Success", null, StatusCodes.NOT_FOUND);
+      }
 
       const countryPopulation = await this.fetchCountryPopulation(
         borderInfo.commonName
