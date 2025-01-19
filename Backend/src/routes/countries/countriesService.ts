@@ -16,10 +16,6 @@ class CountriesService {
         method: "POST",
         body: JSON.stringify(body),
       });
-      // if (responsePromise.ok !== true) {
-      //   logger.info(await responsePromise.json());
-      //   throw new Error("Response is not succeded");
-      // }
 
       const countryPopulation =
         (await responsePromise.json()) as ICountryPopulationResponse;
