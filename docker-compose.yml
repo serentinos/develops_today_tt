@@ -3,20 +3,16 @@ services:
   backend:
     build: "backend"
     ports:
-      - 8088:8088
+      - 8080:8080
     environment:
-      - NODE_ENV=development
-      - PORT=8088
-      - HOST=localhost
-
-      - CORS_ORIGIN=http://frontend:*
+      - backend/.env
 
   frontend:
     build: frontend
     ports:
       - 3000:3000
-    environment:
-      - BACKEND_URL=http://backend:8088
+    env_file:
+      - frontend/.env
     depends_on:
       backend:
         condition: service_started
