@@ -5,7 +5,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch --clear-screen=false src/index.ts"
+    "dev": "tsx watch --clear-screen=false src/index.ts",
+    "build": "tsc --build"
   },
   "keywords": [],
   "author": "",
