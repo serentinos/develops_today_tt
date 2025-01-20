@@ -32,4 +32,15 @@ npm i
 npm run dev
 ```
 
+## Deploy with docker
 
+Install Docker and Docker Compose
+
+run command
+```
+docker compose up
+```
+
+Done! Check your localhost:3000 then!
+
+Currently backend running in dev mode.
